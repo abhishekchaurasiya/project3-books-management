@@ -3,7 +3,7 @@ const bookModel = require("../models/bookModels");
 const mongoose = require("mongoose")
 const ObjectId = mongoose.Types.ObjectId
 
-const { isValidRequestBody,isValidData, isValidISBN,isValidReleasedAt } = require("../utils/validator");
+const { isValidRequestBody,isValidData, isValidISBN,isValidReleasedAt,isValidRequestQuery } = require("../utils/validator");
 
 function isValidObjectId(id){
      
@@ -93,12 +93,16 @@ const createBook = async function(req,res){
 const getBooks = async function (req,res){
     try {
         let requestQuery = req.query;
-        let {userId,category,subcategory} = requestQuery
+        if (!isValidRequestQuery(requestQuery)) {
+            return res.status(400).send({ status: false, message: "No data provided" });
+        }
 
-        let findBooks = await bookModel.find({userId,category,subcategory,isDeleted: false }).select({title:1, excerpt:1, userId:1, category:1,releasedAt:1,reviews:1}).sort()
+        let findBooks = await bookModel.find({...requestQuery,isDeleted: false }).select({title:1, excerpt:1, userId:1, category:1,releasedAt:1,reviews:1}).sort()
+
+        if(findBooks.length==0)
+        return res.status(404).send({status:false, msg:"No Book Data Found"})
 
         res.status(200).send({status:true,msg:"All Books",data:findBooks})
-
 
     } catch (error) {
       res.status(500).send({ status: false, message: error.message });  
