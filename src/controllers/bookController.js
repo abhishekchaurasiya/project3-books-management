@@ -61,7 +61,7 @@ const createBook = async function(req,res){
             return res.status(400).send({ status: false, msg: "ISBN already exist" });
         }
 
-        if(!isValidISBN.test(requestBody.ISBN)){
+        if(!isValidISBN.test(ISBN)){
             return res.status(400).send({ status: false, message: "ISBN is invalid" });  
         }
 
@@ -81,7 +81,7 @@ const createBook = async function(req,res){
             return res.status(400).send({ status: false, message: "Please Provide the release date of the book" });  
         }
 
-        if(!isValidReleasedAt.test(requestBody.releasedAt)){
+        if(!isValidReleasedAt.test(releasedAt)){
             return res.status(400).send({ status: false, message: "The Format of the release date should be look like 'YYYY-MM-DD'" });  
         }
 
@@ -97,9 +97,6 @@ const createBook = async function(req,res){
 const getBooks = async function (req,res){
     try {
         let requestQuery = req.query;
-        if (!isValidRequestQuery(requestQuery)) {
-            return res.status(400).send({ status: false, message: "No data provided" });
-        }
 
         let findBooks = await bookModel.find({...requestQuery,isDeleted: false }).select({title:1, excerpt:1, userId:1, category:1,releasedAt:1,reviews:1})
 
