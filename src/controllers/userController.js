@@ -3,7 +3,6 @@ const jwt = require("jsonwebtoken");
 
 //Destructuring All Variable
 const {isValidData,isValidRequestBody,isValidEmail,isValidPhone} = require("../utils/validator");
-const res = require("express/lib/response");
 
 const createUser = async function (req, res) {
     try {
