@@ -12,5 +12,9 @@ let isValidEmail = (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/);
 
 let isValidPhone = /^\d{10}$/;
 
+let isValidISBN = (/^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$/);
 
-module.exports = { isValidData, isValidRequestBody, isValidEmail, isValidPhone}
+let isValidReleasedAt = /((\d{4}[\/-])(\d{2}[\/-])(\d{2}))/;
+
+
+module.exports = { isValidData, isValidRequestBody, isValidEmail, isValidPhone, isValidISBN, isValidReleasedAt}
