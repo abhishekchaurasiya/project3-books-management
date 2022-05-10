@@ -63,7 +63,7 @@ const createUser = async function (req, res) {
         if (!isValidData(address)) {
             return res.status(400).send({ status: false, message: "Address is required." });
         }
-
+        
         let createData = await userModel.create(requestBody);
         res.status(201).send({ status: true, message: "User data created successfully", data: createData, });
     }
@@ -71,7 +71,6 @@ const createUser = async function (req, res) {
         res.status(500).send({ status: false, message: error.message });
     }
 };
-
 
 
 const loginUser = async function (req, res) {
@@ -102,7 +101,9 @@ const loginUser = async function (req, res) {
                 userId: matchUser._id.toString(),
                 Project: "Book Management",
                 batch: "Uranium",
-                iat: Math.floor(Date.now() / 1000),
+                iat: new Date().getTime()/ 1000 
+                //give you time in miliseconds. But time in jwt token exp is in seconds, therefore we have to divide result by 1000.
+                //(iat)Issued At- the time at which the JWT was issued.
             },
             "Project-03_group-28",
             {
