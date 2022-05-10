@@ -2,12 +2,7 @@ const userModel = require("../models/userModels");
 const jwt = require("jsonwebtoken");
 
 //Destructuring All Variable
-const {
-    isValidData,
-    isValidRequestBody,
-    isValidEmail,
-    isValidPhone,
-} = require("../utils/validator");
+const {isValidData,isValidRequestBody,isValidEmail,isValidPhone} = require("../utils/validator");
 const res = require("express/lib/response");
 
 const createUser = async function (req, res) {
@@ -15,9 +10,7 @@ const createUser = async function (req, res) {
         let requestBody = req.body;
 
         if (!isValidRequestBody(requestBody)) {
-            return res
-                .status(400)
-                .send({ status: false, message: "No data provided" });
+            return res.status(400).send({ status: false, message: "No data provided" });
         }
 
         let { title, name, phone, email, password, address } = requestBody;
@@ -102,7 +95,7 @@ const createUser = async function (req, res) {
                 .status(400)
                 .send({ status: false, message: "Address is required." });
         }
-
+        
         let createData = await userModel.create(requestBody);
         res
             .status(201)
@@ -115,6 +108,7 @@ const createUser = async function (req, res) {
         res.status(500).send({ status: false, message: error.message });
     }
 };
+
 
 const loginUser = async function (req, res) {
     try {
@@ -150,19 +144,17 @@ const loginUser = async function (req, res) {
                 userId: matchUser._id.toString(),
                 Project: "Book Management",
                 batch: "Uranium",
-                iat: Math.floor(Date.now() / 1000),
+                iat: new Date().getTime()/ 1000 
+                //give you time in miliseconds. But time in jwt token exp is in seconds, therefore we have to divide result by 1000.
+                //(iat)Issued At- the time at which the JWT was issued.
             },
-            "Project-03_group-28",
-            {
-                expiresIn: "1200sec",
-            }
-        );
+            "Project-03_group-28",{expiresIn: "1200sec"});
 
         return res
             .status(200)
             .send({
                 status: true,
-                message: "User Logged in successfully",
+                message: "User Logged In successfully",
                 data: token,
             });
     } catch (error) {
