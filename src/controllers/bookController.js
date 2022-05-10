@@ -73,6 +73,10 @@ const createBook = async function(req,res){
             return res.status(400).send({ status: false, message: "Subcategory is Required" });  
         }
 
+        if(!Array.isArray(subcategory)){
+            return res.status(400).send({ status: false, message: "Subcategory Must be in Array" });  
+        }
+
         if(!isValidData(releasedAt)){
             return res.status(400).send({ status: false, message: "Please Provide the release date of the book" });  
         }
@@ -97,8 +101,15 @@ const getBooks = async function (req,res){
             return res.status(400).send({ status: false, message: "No data provided" });
         }
 
-        let findBooks = await bookModel.find({...requestQuery,isDeleted: false }).select({title:1, excerpt:1, userId:1, category:1,releasedAt:1,reviews:1}).sort()
+        let findBooks = await bookModel.find({...requestQuery,isDeleted: false }).select({title:1, excerpt:1, userId:1, category:1,releasedAt:1,reviews:1})
 
+        findBooks.sort(function (a,b){
+         return a.title.localeCompare(b.title)
+        })
+
+        //we have Lowercase & UpperCase Name in the Title So we use .lowerCase() here
+        // findBooks.sort((a,b)=> (a.title.toLowerCase() > b.title.toLowerCase() ? 1 : -1))
+         
         if(findBooks.length==0)
         return res.status(404).send({status:false, msg:"No Book Data Found"})
 
