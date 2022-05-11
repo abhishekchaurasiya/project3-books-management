@@ -94,7 +94,7 @@ const getBooks = async function (req, res) {
     try {
         let requestQuery = req.query;
 
-        let findBooks = await bookModel.find({ ...requestQuery, isDeleted: false }).select({ title: 1, excerpt: 1, userId: 1, ISBN: 1, category: 1, releasedAt: 1, reviews: 1 })
+        let findBooks = await bookModel.find({ ...requestQuery, isDeleted: false }).select({ title: 1, excerpt: 1, userId: 1, category: 1, releasedAt: 1, reviews: 1 })
 
         findBooks.sort(function (a, b) {
             return a.title.localeCompare(b.title)
