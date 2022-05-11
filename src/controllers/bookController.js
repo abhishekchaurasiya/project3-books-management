@@ -1,5 +1,6 @@
 const userModel = require("../models/userModels");
 const bookModel = require("../models/bookModels");
+const reviewModel = require ("../models/reviewModels")
 
 const { isValidRequestBody, isValidData, isValidISBN, isValidReleasedAt, isValidObjectId } = require("../utils/validator");
 
@@ -120,7 +121,27 @@ const getBooksById = async function (req, res) {
         if (findBookId.length == 0)
             return res.status(404).send({ status: false, msg: "No Book Data Found" })
 
-        res.status(200).send({ status: true, msg: "All Books", data: findBookId })
+        let reviews = await reviewModel.find({_id:bookId}).select({isDeleted:0})
+        let bookReview =JSON.parse(JSON.stringify(findBookId))
+        bookReview.reviewsData = reviews
+
+        // let bookDetails ={
+        //     _id:findBookId._id,
+        //     title:findBookId.title,
+        //     excerpt: findBookId.excerpt,
+        //     userId: findBookId.userId,
+        //     category: findBookId.category,
+        //     subcategory: findBookId.subcategory,
+        //     review: findBookId.review,
+        //     isDeleted: findBookId.isDeleted,
+        //     deletedAt: findBookId.deletedAt,
+        //     releasedAt: findBookId.releasedAt,
+        //     createdAt: findBookId.createdAt,
+        //     updatedAt: findBookId.updatedAt,
+        //     reviewsData: reviews
+        // }
+
+        res.status(200).send({ status: true, msg: "All Books", data: bookReview })
 
     } catch (error) {
         res.status(500).send({ status: false, message: error.message });
