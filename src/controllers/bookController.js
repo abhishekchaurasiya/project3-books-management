@@ -93,16 +93,20 @@ const createBook = async function (req, res) {
 const getBooks = async function (req, res) {
     try {
         let requestQuery = req.query;
-        let { userId, category, subcategory } = requestQuery
 
+        let findBooks = await bookModel.find({ ...requestQuery, isDeleted: false }).select({ title: 1, excerpt: 1, userId: 1, category: 1, releasedAt: 1, reviews: 1 })
 
+        findBooks.sort(function (a, b) {
+            return a.title.localeCompare(b.title)
+        })
 
-        let findBooks = await bookModel.find({ $or: { $in:[ userId, category, subcategory ] } }).select({ title: 1, excerpt: 1, userId: 1, category: 1, releasedAt: 1, reviews: 1 }).sort();
+        //we have Lowercase & UpperCase Name in the Title So we use .lowerCase() here
+        // findBooks.sort((a,b)=> (a.title.toLowerCase() > b.title.toLowerCase() ? 1 : -1))
 
-
+        if (findBooks.length == 0)
+            return res.status(404).send({ status: false, msg: "No Book Data Found" })
 
         res.status(200).send({ status: true, msg: "All Books", data: findBooks })
-
 
     } catch (error) {
         res.status(500).send({ status: false, message: error.message });
