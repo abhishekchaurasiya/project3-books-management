@@ -80,7 +80,6 @@ const loginUser = async function (req, res) {
 
         if (!isValidRequestBody(requestBody)) {
             return res.status(400).send({ status: false, message: "No data provided" });
-
         }
 
         if (!isValidData(email)) {
