@@ -32,7 +32,7 @@ const createBook = async function (req, res) {
             return res.status(400).send({ status: false, message: "userId is Required" });
         }
 
-        if (!isValidObjectId(userId)) {
+        if (!isValidObjectId.test(userId)) {
             return res.status(400).send({ status: false, message: "userId is Invalid" });
         }
 
@@ -61,6 +61,12 @@ const createBook = async function (req, res) {
         if (!isValidData(subcategory)) {
             return res.status(400).send({ status: false, message: "Subcategory is Required" });
         }
+
+        if (!Array.isArray(subcategory)) {
+            if(subcategory.length==0){
+            return res.status(400).send({ status: false, message: "Subcategory Must be in Array" });
+        }
+    }
 
         if (!isValidData(releasedAt)) {
             return res.status(400).send({ status: false, message: "Please Provide the release date of the book" });
@@ -212,6 +218,6 @@ const deleteBooks = async function(req,res){
 }
 
 
-module.exports = { createBook, getBooks, getBooksById , updateBooks,deleteBooks};
+module.exports = { createBook, getBooks, getBooksById , updateBooks, deleteBooks};
 
 
