@@ -96,9 +96,6 @@ const getBooks = async function (req, res) {
             return a.title.localeCompare(b.title)
         })
 
-        //we have Lowercase & UpperCase Name in the Title So we use .lowerCase() here
-        // findBooks.sort((a,b)=> (a.title.toLowerCase() > b.title.toLowerCase() ? 1 : -1))
-
         if (findBooks.length == 0)
             return res.status(404).send({ status: false, msg: "No Book Data Found" })
 
