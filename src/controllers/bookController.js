@@ -189,11 +189,29 @@ const updateBooks = async function (req, res) {
     }
 }
 
+//============================================< DELETE BOOK >===============================================//
+
+const deleteBooks = async function(req,res){
+    try {
+        let bookId = req.params.bookId;
+
+        if (!isValidObjectId.test(bookId)) {
+            return res.status(400).send({ status: false, message: "Please enter the valid book Id" })
+        }
+        
+        let findBookId = await bookModel.findById({ _id: bookId, isDeleted: false })
+        if (findBookId.length == 0)
+        return res.status(404).send({ status: false, msg: "No Book Data Found" })
+
+        const deleteBook = await bookModel.findOneAndUpdate({findBookId},{isDeleted:true,deletedAt: new Date()},{new:true})
+        return res.status(200).send({status:true, message:"Book Data Updated Successfully", data: deleteBook})
+
+    } catch (error) {
+        res.status(500).send({ status: false, message: error.message });   
+    }
+}
 
 
-
-
-
-module.exports = { createBook, getBooks, getBooksById , updateBooks};
+module.exports = { createBook, getBooks, getBooksById , updateBooks,deleteBooks};
 
 
