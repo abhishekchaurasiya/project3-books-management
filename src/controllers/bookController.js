@@ -1,19 +1,7 @@
 const userModel = require("../models/userModels");
 const bookModel = require("../models/bookModels");
-const mongoose = require("mongoose")
-const ObjectId = mongoose.Types.ObjectId
 
-const { isValidRequestBody, isValidData, isValidISBN, isValidReleasedAt } = require("../utils/validator");
-
-function isValidObjectId(id) {
-
-    if (ObjectId.isValid(id)) {
-        if ((String)(new ObjectId(id)) === id)
-            return true;
-        return false;
-    }
-    return false;
-}
+const { isValidRequestBody, isValidData, isValidISBN, isValidReleasedAt, isValidObjectId } = require("../utils/validator");
 
 
 const createBook = async function (req, res) {
@@ -113,4 +101,24 @@ const getBooks = async function (req, res) {
     }
 }
 
-module.exports = { createBook, getBooks };
+
+let getBooksById = async function (req, res) {
+    try {
+        let bookId = req.params.bookId;
+
+        if (!isValidObjectId.test(bookId)) {
+            return res.status(400).send({ status: false, message: "Please enter the valid book Id" })
+        }
+
+        let findBookId = await bookModel.findById({ _id: bookId }).select({ ISBN: 0 })
+        res.status(200).send({ status: true, msg: "All Books", data: findBookId })
+
+    } catch (error) {
+        res.status(500).send({ status: false, message: error.message });
+    }
+
+}
+
+module.exports = { createBook, getBooks, getBooksById };
+
+

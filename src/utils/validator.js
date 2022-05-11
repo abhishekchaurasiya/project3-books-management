@@ -12,6 +12,15 @@ let isValidRequestQuery = function (requestQuery) {
     return Object.keys(requestQuery).length > 0;
 };
 
+// let isValidObjectId = (id) => {
+//     if (ObjectId.isValid(id)) {
+//         if ((String)(new ObjectId(id)) === id)
+//             return true;
+//         return false;
+//     }
+//     return false;
+// };
+
 let isValidEmail = (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/);
 
 let isValidPhone = /^\d{10}$/;
@@ -20,5 +29,7 @@ let isValidISBN = (/^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$/);
 
 let isValidReleasedAt = /((\d{4}[\/-])(\d{2}[\/-])(\d{2}))/;
 
+let isValidObjectId = /^[0-9a-fA-F]{24}$/;
 
-module.exports = { isValidData, isValidRequestBody, isValidEmail, isValidPhone, isValidISBN, isValidReleasedAt, isValidRequestQuery}
+
+module.exports = { isValidData, isValidRequestBody, isValidEmail, isValidPhone, isValidISBN, isValidReleasedAt, isValidRequestQuery,isValidObjectId }
