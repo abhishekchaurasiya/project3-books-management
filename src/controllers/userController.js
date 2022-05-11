@@ -1,7 +1,7 @@
 const userModel = require("../models/userModels");
 const jwt = require("jsonwebtoken");
 
-const { isValidData, isValidRequestBody, isValidEmail, isValidPhone, } = require("../utils/validator");
+const { isValidData, isValidRequestBody, isValidEmail, isValidPhone,isValidName } = require("../utils/validator");
 
 
 const createUser = async function (req, res) {
@@ -25,6 +25,9 @@ const createUser = async function (req, res) {
         if (!isValidData(name)) {
             return res.status(400).send({ status: false, message: "Name is required." });
         }
+        if(!isValidName.test(name)){
+            return res.status(400).send({status:false, msg: "Please enter a valid Name"}) 
+           }
 
         if (!isValidData(phone)) {
             return res.status(400).send({ status: false, message: "Phone is required." });
@@ -92,7 +95,7 @@ const loginUser = async function (req, res) {
 
         const matchUser = await userModel.findOne({ email, password });
         if (!matchUser) {
-            return res.status(400).send({ status: false, message: " Email/Password is Not Matched" });
+            return res.status(404).send({ status: false, message: " Email/Password is Not Matched" });
         }
 
         const token = jwt.sign(
