@@ -8,9 +8,9 @@ let isValidRequestBody = function (requestBody) {
     return Object.keys(requestBody).length > 0;
 };
 
-let isValidRequestQuery = function (requestQuery) {
-    return Object.keys(requestQuery).length > 0;
-};
+// let isValidRequestQuery = function (requestQuery) {
+//     return Object.keys(requestQuery).length > 0;
+// };
 
 let isValidName = (/^[a-zA-Z ]*$/);
 
@@ -25,4 +25,4 @@ let isValidReleasedAt = /((\d{4}[\/-])(\d{2}[\/-])(\d{2}))/;
 let isValidObjectId = /^[0-9a-fA-F]{24}$/;
 
 
-module.exports = { isValidData, isValidRequestBody, isValidEmail, isValidPhone, isValidISBN, isValidReleasedAt, isValidRequestQuery,isValidObjectId, isValidName }
+module.exports = { isValidData, isValidRequestBody, isValidEmail, isValidPhone, isValidISBN, isValidReleasedAt,isValidObjectId, isValidName }

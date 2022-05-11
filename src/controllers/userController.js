@@ -95,7 +95,7 @@ const loginUser = async function (req, res) {
 
         const matchUser = await userModel.findOne({ email, password });
         if (!matchUser) {
-            return res.status(400).send({ status: false, message: " Email/Password is Not Matched" });
+            return res.status(404).send({ status: false, message: " Email/Password is Not Matched" });
         }
 
         const token = jwt.sign(

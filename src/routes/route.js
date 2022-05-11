@@ -5,6 +5,8 @@ const { createUser, loginUser } = require("../controllers/userController");
 
 const { createBook, getBooks, getBooksById, updateBooks,deleteBooks } = require("../controllers/bookController");
 
+const {bookReview} = require("../controllers/reviewController")
+
 // const {authentication} = require("../middlewares/mid");
 
 
@@ -25,5 +27,7 @@ router.get("/books/:bookId", getBooksById);
 router.put("/books/:bookId", updateBooks);
 
 router.delete("/books/:bookId", deleteBooks);
+
+router.post("/books/review", bookReview)
 
 module.exports = router;
