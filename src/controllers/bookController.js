@@ -109,7 +109,7 @@ let getBooksById = async function (req, res) {
         if (!isValidObjectId.test(bookId)) {
             return res.status(400).send({ status: false, message: "Please enter the valid book Id" })
         }
-
+        
         let findBookId = await bookModel.findById({ _id: bookId }).select({ ISBN: 0 })
         res.status(200).send({ status: true, msg: "All Books", data: findBookId })
 
