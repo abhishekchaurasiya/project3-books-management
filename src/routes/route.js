@@ -3,9 +3,9 @@ const router = express.Router()
 
 const { createUser, loginUser } = require("../controllers/userController");
 
-const { createBook, getBooks, getBooksById, updateBooks,deleteBooks } = require("../controllers/bookController");
+const { createBook, getBooks, getBooksById, updateBooks, deleteBooks } = require("../controllers/bookController");
 
-const {bookReview} = require("../controllers/reviewController")
+const { bookReview } = require("../controllers/reviewController")
 
 // const {authentication} = require("../middlewares/mid");
 
