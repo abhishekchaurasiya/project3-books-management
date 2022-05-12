@@ -129,10 +129,12 @@ const getBooksById = async function (req, res) {
         let { _id, title, excerpt, userId, category, subcategory, review, isDeleted, deletedAt, releasedAt, createdAt, updatedAt } = findBookId
 
         let reviewsData = await reviewModel.find({ bookId }).select({ isDeleted: 0 })
+        
+        let bookDetails = { _id, title, excerpt, userId, category, subcategory, review, isDeleted, deletedAt, releasedAt, createdAt, updatedAt, reviewsData }
+
+        
         // let bookReview =JSON.parse(JSON.stringify(findBookId))
         // bookReview.reviewsData = reviews
-
-        let bookDetails = { _id, title, excerpt, userId, category, subcategory, review, isDeleted, deletedAt, releasedAt, createdAt, updatedAt, reviewsData }
 
         // let bookDetails ={
         //     _id:findBookId._id,
@@ -155,7 +157,6 @@ const getBooksById = async function (req, res) {
     } catch (error) {
         res.status(500).send({ status: false, message: error.message });
     }
-
 }
 
 //============================================< UPDATE BOOK >===============================================//
@@ -240,6 +241,10 @@ const deleteBooks = async function (req, res) {
         if (!findBookId) {
             return res.status(404).send({ status: false, msg: "Book Not found" })
         }
+
+        if(findBookId.userId != req.userId){
+            return res.status(403).send({ status: false, message: "You Are Not Unauthorized" });  
+          }
 
         let isDeletedBook = findBookId.isDeleted
         if (isDeletedBook == true) {
