@@ -42,6 +42,10 @@ const createBook = async function (req, res) {
             return res.status(404).send({ status: false, msg: "User does not exists" });
         }
 
+        if(userId != req.userId){
+        return res.status(403).send({ status: false, message: "You Are Not Unauthorized" });  
+      }
+
         if (!isValidData(ISBN)) {
             return res.status(400).send({ status: false, message: "ISBN is Required" });
         }
@@ -125,10 +129,12 @@ const getBooksById = async function (req, res) {
         let { _id, title, excerpt, userId, category, subcategory, review, isDeleted, deletedAt, releasedAt, createdAt, updatedAt } = findBookId
 
         let reviewsData = await reviewModel.find({ bookId }).select({ isDeleted: 0 })
+        
+        let bookDetails = { _id, title, excerpt, userId, category, subcategory, review, isDeleted, deletedAt, releasedAt, createdAt, updatedAt, reviewsData }
+
+        
         // let bookReview =JSON.parse(JSON.stringify(findBookId))
         // bookReview.reviewsData = reviews
-
-        let bookDetails = { _id, title, excerpt, userId, category, subcategory, review, isDeleted, deletedAt, releasedAt, createdAt, updatedAt, reviewsData }
 
         // let bookDetails ={
         //     _id:findBookId._id,
@@ -151,7 +157,6 @@ const getBooksById = async function (req, res) {
     } catch (error) {
         res.status(500).send({ status: false, message: error.message });
     }
-
 }
 
 //============================================< UPDATE BOOK >===============================================//
@@ -171,9 +176,13 @@ const updateBooks = async function (req, res) {
 
         let findBookId = await bookModel.findById({ _id: bookId, isDeleted: false })
         if (findBookId.length == 0)
-            return res.status(404).send({ status: false, msg: "No Book Data Found" })
+        return res.status(404).send({ status: false, msg: "No Book Data Found" })
 
-        let { title, excerpt, releasedAt, ISBN } = requestBody;
+        if(findBookId.userId != req.userId){
+            return res.status(403).send({ status: false, message: "You Are Not Unauthorized" });  
+          }
+        
+        let { title, excerpt, releasedAt, ISBN } = requestBody
 
         if (!isValidData(title)) {
             return res.status(400).send({ status: false, message: "Title is Required" });
@@ -232,6 +241,10 @@ const deleteBooks = async function (req, res) {
         if (!findBookId) {
             return res.status(404).send({ status: false, msg: "Book Not found" })
         }
+
+        if(findBookId.userId != req.userId){
+            return res.status(403).send({ status: false, message: "You Are Not Unauthorized" });  
+          }
 
         let isDeletedBook = findBookId.isDeleted
         if (isDeletedBook == true) {

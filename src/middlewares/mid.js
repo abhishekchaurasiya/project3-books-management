@@ -3,7 +3,6 @@ const userModel = require("../models/userModels");
 const bookModel = require("../models/bookModels");
 const reviewModel = require("../models/reviewModels");
 
-
 const authentication = async function (req, res, next) {
     try {
         let token = req.headers["x-user-key"];
@@ -14,6 +13,9 @@ const authentication = async function (req, res, next) {
         let decodedToken = jwt.verify(token, "Project-03_group-28");
         if (!decodedToken)
             return res.status(400).send({ status: false, message: "Inter valid token" });
+        
+        req.userId = decodedToken.userId
+
         next();
 
     } catch (error) {
@@ -21,4 +23,4 @@ const authentication = async function (req, res, next) {
     }
 }
 
-module.exports = { authentication }
+module.exports ={ authentication }
