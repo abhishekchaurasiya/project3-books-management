@@ -7,6 +7,7 @@ const reviewModel = require("../models/reviewModels");
 const authentication = async function (req, res, next) {
     try {
         let token = req.headers["x-user-key"];
+        if (!token) token = req.headers["X-User-Key"]
         if (!token)
             return res.status(400).send({ status: false, message: "Token required! Please login to generate token" });
 

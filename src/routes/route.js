@@ -7,7 +7,7 @@ const { createBook, getBooks, getBooksById, updateBooks, deleteBooks } = require
 
 const { bookReview } = require("../controllers/reviewController")
 
-// const {authentication} = require("../middlewares/mid");
+const { authentication } = require("../middlewares/mid");
 
 
 
@@ -18,7 +18,7 @@ router.post("/register", createUser);
 
 router.post("/login", loginUser);
 
-router.post("/books", createBook);
+router.post("/books", authentication, createBook);
 
 router.get("/books", getBooks);
 
@@ -28,6 +28,6 @@ router.put("/books/:bookId", updateBooks);
 
 router.delete("/books/:bookId", deleteBooks);
 
-router.post("/books/review", bookReview)
+router.post("/books/:bookId/review", bookReview)
 
 module.exports = router;
