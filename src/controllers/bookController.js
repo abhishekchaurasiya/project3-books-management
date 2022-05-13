@@ -174,7 +174,7 @@ const updateBooks = async function (req, res) {
             return res.status(400).send({ status: false, message: "Please enter the valid book Id" })
         }
 
-        let findBookId = await bookModel.findById({ _id: bookId, isDeleted: false })
+        let findBookId = await bookModel.findById({ bookId, isDeleted: false })
         if (findBookId.length == 0)
         return res.status(404).send({ status: false, msg: "No Book Data Found" })
 
