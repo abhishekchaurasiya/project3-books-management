@@ -54,9 +54,7 @@ const bookReview = async function(req, res) {
             return res.status(400).send({ status: false, msg: "Please provied reviewers name " })
         }
 
-        let updatedBook = await bookModel.findByIdAndUpdate({ _id: booksId })
-
-
+        let updatedBook = await bookModel.findByIdAndUpdate({ _id: booksId })   
         //Meme.findOneAndUpdate(post, post.likes: post.likes + 1)
 
 
