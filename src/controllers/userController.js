@@ -63,9 +63,13 @@ const createUser = async function (req, res) {
             return res.status(400).send({ status: false, msg: "Password Should be minimum 8 characters and maximum 15 characters", });
         }
 
-        if (!isValidData(address)) {
-            return res.status(400).send({ status: false, message: "Address is required." });
+        if (typeof address !== "object") {
+            return res.status(400).send({ status: false, message: "Address must be in Object" });
         }
+
+        // if (!isValidData(address)) {
+        //     return res.status(400).send({ status: false, message: "Address is required." });
+        // }
         
         let createData = await userModel.create(requestBody);
         res.status(201).send({ status: true, message: "User data created successfully", data: createData, });
