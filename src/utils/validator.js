@@ -8,10 +8,6 @@ let isValidRequestBody = function (requestBody) {
     return Object.keys(requestBody).length > 0;
 };
 
-// let isValidRequestQuery = function (requestQuery) {
-//     return Object.keys(requestQuery).length > 0;
-// };
-
 let isValidName = (/^[a-zA-Z ]*$/);
 
 let isValidEmail = (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/);

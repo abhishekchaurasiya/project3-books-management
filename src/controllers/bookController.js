@@ -132,25 +132,8 @@ const getBooksById = async function(req, res) {
 
         let bookDetails = { _id, title, excerpt, userId, category, subcategory, review, isDeleted, deletedAt, releasedAt, createdAt, updatedAt, reviewsData }
 
-
         // let bookReview =JSON.parse(JSON.stringify(findBookId))
         // bookReview.reviewsData = reviews
-
-        // let bookDetails ={
-        //     _id:findBookId._id,
-        //     title:findBookId.title,
-        //     excerpt: findBookId.excerpt,
-        //     userId: findBookId.userId,
-        //     category: findBookId.category,
-        //     subcategory: findBookId.subcategory,
-        //     review: findBookId.review,
-        //     isDeleted: findBookId.isDeleted,
-        //     deletedAt: findBookId.deletedAt,
-        //     releasedAt: findBookId.releasedAt,
-        //     createdAt: findBookId.createdAt,
-        //     updatedAt: findBookId.updatedAt,
-        //     reviewsData: reviews
-        // }
 
         res.status(200).send({ status: true, msg: "All Books", data: bookDetails })
 
