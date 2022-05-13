@@ -28,9 +28,9 @@ const bookReview = async function (req, res) {
             return res.status(404).send({ status: false, message: "Book is already deleted" })
         }
 
-        let {rating, reviewedBy} = requestBody
+        let { rating, reviewedBy } = requestBody
 
-        requestBody.bookId =bookId
+        requestBody.bookId = bookId
 
         if (!isValidData(reviewedBy)) {
             requestBody.reviewedBy = "Guest"
@@ -56,6 +56,68 @@ const bookReview = async function (req, res) {
     }
 }
 
+// Here start Update 
+
+const reviewUpdate = async function (req, res) {
+    
+    try {
+        let { bookId, reviewId } = req.params;
+
+        let requestBody = req.body;
+
+        if (!isValidRequestBody(requestBody)) {
+            return res.status(400).send({ status: false, message: "No data provided" });
+        }
+
+        if (!isValidObjectId.test(bookId)) {
+            return res.status(400).send({ status: false, message: "Please enter the valid book Id" });
+        }
+
+        let findBookId = await bookModel.findById({ _id: bookId })
+        if (!findBookId) {
+            return res.status(404).send({ status: false, message: "No book found with this id" });
+        }
+
+        let is_Deleted = bookId.isDeleted;
+        if (is_Deleted == true) {
+            return res.status(404).send({ status: false, message: "Book is already deleted" })
+        }
 
 
-module.exports = { bookReview }
+        if (!isValidObjectId.test(reviewId)) {
+            return res.status(400).send({ status: false, message: "Please enter the valid review Id" });
+        }
+
+        let findReviewId = await reviewModel({ _id: reviewId });
+        if (!findReviewId) {
+            return res.status(404).send({ status: false, message: "No review data found with this id" });
+        }
+
+        let { review, rating, reviewedBy } = requestBody;
+
+        if (!isValidData(rating)) {
+            return res.status(400).send({ status: false, msg: "Please provied the rating  " })
+        }
+        if (!(rating >= 1 && rating <= 5)) {
+            return res.status(400).send({ status: false, msg: "Rating Should be minimum 1 and maximum 5" });
+        }
+
+        if (!isValidData(reviewedBy)) {
+            requestBody.reviewedBy = "Guest"
+        }
+
+        let findReview = await reviewModel.findOneAndUpdate({ _id: reviewId }, { $set: { ...requestBody } }, { new: true });
+
+        res.status(200).send({ status: true, message: "Review Updated Successfully", data: findBookId, ...findReview.toObject() });
+
+    } catch (error) {
+        res.status(500).send({ status: false, message: error.message });
+    }
+}
+
+
+
+
+
+
+module.exports = { bookReview, reviewUpdate }
