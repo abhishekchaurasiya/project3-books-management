@@ -6,7 +6,7 @@ const { isValidRequestBody, isValidData, isValidISBN, isValidReleasedAt, isValid
 
 //============================================< CREATE BOOK >===============================================//
 
-const createBook = async function (req, res) {
+const createBook = async function(req, res) {
     try {
         const requestBody = req.body;
 
@@ -42,9 +42,9 @@ const createBook = async function (req, res) {
             return res.status(404).send({ status: false, msg: "User does not exists" });
         }
 
-        if(userId != req.userId){
-        return res.status(403).send({ status: false, message: "You Are Not Unauthorized" });  
-      }
+        if (userId != req.userId) {
+            return res.status(403).send({ status: false, message: "You Are Not Unauthorized" });
+        }
 
         if (!isValidData(ISBN)) {
             return res.status(400).send({ status: false, message: "ISBN is Required" });
@@ -91,13 +91,13 @@ const createBook = async function (req, res) {
 
 //============================================< GET BOOKS BY QUERY >===============================================//
 
-const getBooks = async function (req, res) {
+const getBooks = async function(req, res) {
     try {
         let requestQuery = req.query;
 
-        let findBooks = await bookModel.find({ ...requestQuery, isDeleted: false }).select({ title: 1, excerpt: 1, userId: 1, category: 1, releasedAt: 1, reviews: 1 })
+        let findBooks = await bookModel.find({...requestQuery, isDeleted: false }).select({ title: 1, excerpt: 1, userId: 1, category: 1, releasedAt: 1, reviews: 1 })
 
-        findBooks.sort(function (a, b) {
+        findBooks.sort(function(a, b) {
             return a.title.localeCompare(b.title)
         })
 
@@ -113,7 +113,7 @@ const getBooks = async function (req, res) {
 
 //============================================< GET BOOKS BY PARAMS >===============================================//
 
-const getBooksById = async function (req, res) {
+const getBooksById = async function(req, res) {
     try {
         let bookId = req.params.bookId;
 
@@ -129,10 +129,10 @@ const getBooksById = async function (req, res) {
         let { _id, title, excerpt, userId, category, subcategory, review, isDeleted, deletedAt, releasedAt, createdAt, updatedAt } = findBookId
 
         let reviewsData = await reviewModel.find({ bookId }).select({ isDeleted: 0 })
-        
+
         let bookDetails = { _id, title, excerpt, userId, category, subcategory, review, isDeleted, deletedAt, releasedAt, createdAt, updatedAt, reviewsData }
 
-        
+
         // let bookReview =JSON.parse(JSON.stringify(findBookId))
         // bookReview.reviewsData = reviews
 
@@ -161,7 +161,7 @@ const getBooksById = async function (req, res) {
 
 //============================================< UPDATE BOOK >===============================================//
 
-const updateBooks = async function (req, res) {
+const updateBooks = async function(req, res) {
     try {
         let bookId = req.params.bookId;
         let requestBody = req.body
@@ -176,12 +176,12 @@ const updateBooks = async function (req, res) {
 
         let findBookId = await bookModel.findById({ bookId, isDeleted: false })
         if (findBookId.length == 0)
-        return res.status(404).send({ status: false, msg: "No Book Data Found" })
+            return res.status(404).send({ status: false, msg: "No Book Data Found" })
 
-        if(findBookId.userId != req.userId){
-            return res.status(403).send({ status: false, message: "You Are Not Unauthorized" });  
-          }
-        
+        if (findBookId.userId != req.userId) {
+            return res.status(403).send({ status: false, message: "You Are Not Unauthorized" });
+        }
+
         let { title, excerpt, releasedAt, ISBN } = requestBody
 
         if (!isValidData(title)) {
@@ -218,7 +218,7 @@ const updateBooks = async function (req, res) {
             return res.status(400).send({ status: false, message: "ISBN is invalid" });
         }
 
-        let updateBook = await bookModel.findOneAndUpdate({ _id: bookId }, { ...requestBody }, { new: true })
+        let updateBook = await bookModel.findOneAndUpdate({ _id: bookId }, {...requestBody }, { new: true })
         return res.status(200).send({ status: true, message: "Book Data Updated Successfully", data: updateBook })
 
     } catch (error) {
@@ -229,7 +229,7 @@ const updateBooks = async function (req, res) {
 
 //============================================< DELETE BOOK >===============================================//
 
-const deleteBooks = async function (req, res) {
+const deleteBooks = async function(req, res) {
     try {
         let bookId = req.params.bookId;
 
@@ -242,9 +242,9 @@ const deleteBooks = async function (req, res) {
             return res.status(404).send({ status: false, msg: "Book Not found" })
         }
 
-        if(findBookId.userId != req.userId){
-            return res.status(403).send({ status: false, message: "You Are Not Unauthorized" });  
-          }
+        if (findBookId.userId != req.userId) {
+            return res.status(403).send({ status: false, message: "You Are Not Unauthorized" });
+        }
 
         let isDeletedBook = findBookId.isDeleted
         if (isDeletedBook == true) {
@@ -263,5 +263,3 @@ const deleteBooks = async function (req, res) {
 
 
 module.exports = { createBook, getBooks, getBooksById, updateBooks, deleteBooks };
-
-
