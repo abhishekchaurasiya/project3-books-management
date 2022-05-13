@@ -104,6 +104,10 @@ const reviewUpdate = async function (req, res) {
             requestBody.reviewedBy = "Guest"
         }
 
+        if (!isValidData(review)) {
+            return res.status(400).send({ status: false, msg: "Please provied the review" })
+        }
+
         let findReview = await reviewModel.findOneAndUpdate({ _id: reviewId }, { $set: { ...requestBody } }, { new: true });
 
         res.status(200).send({ status: true, message: "Review Updated Successfully", data: findBookId, ...findReview.toObject() });
