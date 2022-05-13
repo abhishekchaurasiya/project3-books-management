@@ -7,38 +7,33 @@ const { isValidRequestBody, isValidData, isValidObjectId } = require("../utils/v
 const bookReview = async function (req, res) {
     try {
 
-        const booksId = req.params.bookId
+        const bookId = req.params.bookId
         const requestBody = req.body;
 
         if (!isValidRequestBody(requestBody)) {
             return res.status(400).send({ status: false, message: "No data provided" });
         }
 
-        if (!isValidObjectId.test(booksId)) {
+        if (!isValidObjectId.test(bookId)) {
             return res.status(400).send({ status: false, message: "Please enter the valid book Id" })
         }
 
-        let findBookId = await bookModel.findById({ _id: booksId })
+        let findBookId = await bookModel.findById({ _id: bookId })
         if (!findBookId) {
             return res.status(404).send({ status: false, message: "No book found with this id" })
         }
 
-        let is_Deleted = booksId.isDeleted;
+        let is_Deleted = bookId.isDeleted;
         if (is_Deleted == true) {
             return res.status(404).send({ status: false, message: "Book is already deleted" })
         }
 
-        let { bookId, reviewedBy, rating } = requestBody
+        let {rating, reviewedBy} = requestBody
 
-        if (!isValidData(bookId)) {
-            return res.status(400).send({ status: false, msg: "BookId is required" })
-        }
+        requestBody.bookId =bookId
 
-        if (!isValidObjectId.test(bookId)) {
-            return res.status(400).send({ status: false, message: "Please enter the valid book Id" })
-        }
-        if (booksId !== bookId) {
-            return res.status(400).send({ status: false, msg: "Params booksId not match with request bookId " })
+        if (!isValidData(reviewedBy)) {
+            requestBody.reviewedBy = "Guest"
         }
 
         if (!isValidData(rating)) {
@@ -60,5 +55,7 @@ const bookReview = async function (req, res) {
         res.status(500).send({ status: false, message: error.message });
     }
 }
-4
+
+
+
 module.exports = { bookReview }
