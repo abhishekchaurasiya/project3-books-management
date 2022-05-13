@@ -59,7 +59,7 @@ const bookReview = async function (req, res) {
 // Here start Update 
 
 const reviewUpdate = async function (req, res) {
-    
+
     try {
         let { bookId, reviewId } = req.params;
 
@@ -88,7 +88,7 @@ const reviewUpdate = async function (req, res) {
             return res.status(400).send({ status: false, message: "Please enter the valid review Id" });
         }
 
-        let findReviewId = await reviewModel({ _id: reviewId });
+        let findReviewId = await reviewModel.findById({ _id: reviewId });
         if (!findReviewId) {
             return res.status(404).send({ status: false, message: "No review data found with this id" });
         }
