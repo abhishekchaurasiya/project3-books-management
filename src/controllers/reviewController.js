@@ -4,7 +4,7 @@ const userModel = require("../models/userModels");
 
 const { isValidRequestBody, isValidData, isValidObjectId } = require("../utils/validator");
 
-const bookReview = async function(req, res) {
+const bookReview = async function (req, res) {
     try {
 
         const booksId = req.params.bookId
@@ -19,15 +19,19 @@ const bookReview = async function(req, res) {
         }
 
         let findBookId = await bookModel.findById({ _id: booksId })
-
-        if (findBookId.length == 0) {
-            return res.status(404).send({ status: false, msg: "No Book Data Found" })
+        if (!findBookId) {
+            return res.status(404).send({ status: false, message: "No book found with this id" })
         }
-        let { bookId, reviewedBy, reviewedAt, rating, review } = requestBody
 
+        let is_Deleted = booksId.isDeleted;
+        if (is_Deleted == true) {
+            return res.status(404).send({ status: false, message: "Book is already deleted" })
+        }
+
+        let { bookId, reviewedBy, rating } = requestBody
 
         if (!isValidData(bookId)) {
-            return res.status(400).send({ status: false, msg: "Please provied bookId " })
+            return res.status(400).send({ status: false, msg: "BookId is required" })
         }
 
         if (!isValidObjectId.test(bookId)) {
@@ -35,35 +39,26 @@ const bookReview = async function(req, res) {
         }
         if (booksId !== bookId) {
             return res.status(400).send({ status: false, msg: "Params booksId not match with request bookId " })
+        }
 
-        }
-        if (!isValidData(reviewedBy)) {
-            return res.status(400).send({ status: false, msg: "Please provied reviewers name " })
-        }
-        if (!isValidData(reviewedAt)) {
-            return res.status(400).send({ status: false, msg: "Please provied review Date " })
-
-        }
         if (!isValidData(rating)) {
             return res.status(400).send({ status: false, msg: "Please provied  the rating  " })
         }
         if (!(rating >= 1 && rating <= 5)) {
-            return res.status(400).send({ status: false, msg: "Rating Should be minimum 1 and maximum 5 ", });
-        }
-        if (!isValidData(review)) {
-            return res.status(400).send({ status: false, msg: "Please provied reviewers name " })
+            return res.status(400).send({ status: false, msg: "Rating Should be minimum 1 and maximum 5" });
         }
 
-        let updatedBook = await bookModel.findByIdAndUpdate({ _id: booksId })   
-        //Meme.findOneAndUpdate(post, post.likes: post.likes + 1)
+        requestBody.reviewedAt = new Date()
 
+        let updatedBook = await bookModel.findOneAndUpdate({ _id: bookId, }, { $inc: { reviews: +1 } }, { new: true })
 
         const reviewCreation = await reviewModel.create(requestBody);
-        res.status(201).send({ status: true, data: reviewCreation })
+
+        res.status(201).send({ status: true, message: "sucessfully created", data: { ...updatedBook.toObject(), reviewsData: reviewCreation } })
 
     } catch (error) {
         res.status(500).send({ status: false, message: error.message });
     }
 }
-
+4
 module.exports = { bookReview }
