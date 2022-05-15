@@ -5,7 +5,7 @@ const { createUser, loginUser } = require("../controllers/userController");
 
 const { createBook, getBooks, getBooksById, updateBooks, deleteBooks } = require("../controllers/bookController");
 
-const { bookReview, reviewUpdate } = require("../controllers/reviewController")
+const { bookReview, reviewUpdate, reviewDelete } = require("../controllers/reviewController")
 
 const { authentication } = require("../middlewares/mid");
 
@@ -20,7 +20,7 @@ router.post("/books", authentication, createBook);
 
 router.get("/books", authentication, getBooks);
 
-router.get("/books/:bookId", authentication, getBooksById);
+router.get("/books/:bookId", getBooksById);
 
 router.put("/books/:bookId", authentication, updateBooks);
 
@@ -29,5 +29,7 @@ router.delete("/books/:bookId", authentication, deleteBooks);
 router.post("/books/:bookId/review", bookReview)
 
 router.put("/books/:bookId/review/:reviewId", reviewUpdate)
+
+router.delete("/books/:bookId/review/:reviewId", reviewDelete)
 
 module.exports = router;

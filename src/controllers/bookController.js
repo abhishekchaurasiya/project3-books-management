@@ -6,7 +6,7 @@ const { isValidRequestBody, isValidData, isValidISBN, isValidReleasedAt, isValid
 
 //============================================< CREATE BOOK >===============================================//
 
-const createBook = async function(req, res) {
+const createBook = async function (req, res) {
     try {
         const requestBody = req.body;
 
@@ -91,13 +91,13 @@ const createBook = async function(req, res) {
 
 //============================================< GET BOOKS BY QUERY >===============================================//
 
-const getBooks = async function(req, res) {
+const getBooks = async function (req, res) {
     try {
         let requestQuery = req.query;
 
-        let findBooks = await bookModel.find({...requestQuery, isDeleted: false }).select({ title: 1, excerpt: 1, userId: 1, category: 1, releasedAt: 1, reviews: 1 })
+        let findBooks = await bookModel.find({ ...requestQuery, isDeleted: false }).select({ title: 1, excerpt: 1, userId: 1, category: 1, releasedAt: 1, reviews: 1 })
 
-        findBooks.sort(function(a, b) {
+        findBooks.sort(function (a, b) {
             return a.title.localeCompare(b.title)
         })
 
@@ -113,7 +113,7 @@ const getBooks = async function(req, res) {
 
 //============================================< GET BOOKS BY PARAMS >===============================================//
 
-const getBooksById = async function(req, res) {
+const getBooksById = async function (req, res) {
     try {
         let bookId = req.params.bookId;
 
@@ -128,29 +128,17 @@ const getBooksById = async function(req, res) {
 
         let { _id, title, excerpt, userId, category, subcategory, review, isDeleted, deletedAt, releasedAt, createdAt, updatedAt } = findBookId
 
-        let reviewsData = await reviewModel.find({ bookId }).select({ isDeleted: 0 })
+        // let alldata = {}
+
+        let reviewsData = await reviewModel.find({ bookId: bookId }).select({ isDeleted: 0 })
+
+        // alldata["reviewData"] = reviewsData
+
 
         let bookDetails = { _id, title, excerpt, userId, category, subcategory, review, isDeleted, deletedAt, releasedAt, createdAt, updatedAt, reviewsData }
 
-
         // let bookReview =JSON.parse(JSON.stringify(findBookId))
         // bookReview.reviewsData = reviews
-
-        // let bookDetails ={
-        //     _id:findBookId._id,
-        //     title:findBookId.title,
-        //     excerpt: findBookId.excerpt,
-        //     userId: findBookId.userId,
-        //     category: findBookId.category,
-        //     subcategory: findBookId.subcategory,
-        //     review: findBookId.review,
-        //     isDeleted: findBookId.isDeleted,
-        //     deletedAt: findBookId.deletedAt,
-        //     releasedAt: findBookId.releasedAt,
-        //     createdAt: findBookId.createdAt,
-        //     updatedAt: findBookId.updatedAt,
-        //     reviewsData: reviews
-        // }
 
         res.status(200).send({ status: true, msg: "All Books", data: bookDetails })
 
@@ -161,7 +149,7 @@ const getBooksById = async function(req, res) {
 
 //============================================< UPDATE BOOK >===============================================//
 
-const updateBooks = async function(req, res) {
+const updateBooks = async function (req, res) {
     try {
         let bookId = req.params.bookId;
         let requestBody = req.body
@@ -218,7 +206,7 @@ const updateBooks = async function(req, res) {
             return res.status(400).send({ status: false, message: "ISBN is invalid" });
         }
 
-        let updateBook = await bookModel.findOneAndUpdate({ _id: bookId }, {...requestBody }, { new: true })
+        let updateBook = await bookModel.findOneAndUpdate({ _id: bookId }, { ...requestBody }, { new: true })
         return res.status(200).send({ status: true, message: "Book Data Updated Successfully", data: updateBook })
 
     } catch (error) {
@@ -229,7 +217,7 @@ const updateBooks = async function(req, res) {
 
 //============================================< DELETE BOOK >===============================================//
 
-const deleteBooks = async function(req, res) {
+const deleteBooks = async function (req, res) {
     try {
         let bookId = req.params.bookId;
 
