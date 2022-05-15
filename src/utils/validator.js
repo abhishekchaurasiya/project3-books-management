@@ -16,7 +16,7 @@ let isValidPhone = /^\d{10}$/;
 
 let isValidISBN = (/^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$/);
 
-let isValidReleasedAt = /((\d{4}[\/-])(\d{2}[\/-])(\d{2}))/;
+let isValidReleasedAt = /^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$/;
 
 let isValidObjectId = /^[0-9a-fA-F]{24}$/;
 
