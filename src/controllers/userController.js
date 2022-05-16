@@ -1,18 +1,19 @@
 const userModel = require("../models/userModels");
 const jwt = require("jsonwebtoken");
+const { isValidData, isValidRequestBody, isValidEmail, isValidPhone, isValidName } = require("../utils/validator");
 
-const { isValidData, isValidRequestBody, isValidEmail, isValidPhone,isValidName } = require("../utils/validator");
-
+//======================================= < CREATING USER > =========================================
 
 const createUser = async function (req, res) {
     try {
         let requestBody = req.body;
+        let { title, name, phone, email, password, address } = requestBody;
+
+        // Validation Starts......
 
         if (!isValidRequestBody(requestBody)) {
             return res.status(400).send({ status: false, message: "No data provided" });
         }
-
-        let { title, name, phone, email, password, address } = requestBody;
 
         if (!isValidData(title)) {
             return res.status(400).send({ status: false, message: "Title is required." });
@@ -25,9 +26,10 @@ const createUser = async function (req, res) {
         if (!isValidData(name)) {
             return res.status(400).send({ status: false, message: "Name is required." });
         }
-        if(!isValidName.test(name)){
-            return res.status(400).send({status:false, msg: "Please enter a valid Name"}) 
-           }
+
+        if (!isValidName.test(name)) {
+            return res.status(400).send({ status: false, msg: "Please enter a valid Name" })
+        }
 
         if (!isValidData(phone)) {
             return res.status(400).send({ status: false, message: "Phone is required." });
@@ -62,15 +64,19 @@ const createUser = async function (req, res) {
         if (!(password.length >= 8 && password.length <= 15)) {
             return res.status(400).send({ status: false, msg: "Password Should be minimum 8 characters and maximum 15 characters", });
         }
+<<<<<<< HEAD
 
         if (typeof address != "object") {
             return res.status(400).send({ status: false, message: "Address must be in Object" });
+=======
+         
+        if (typeof address !== "object"){
+         return res.status(400).send({ status: false, message: "Address must be in Object" });
+>>>>>>> abf7d95ca261511eb2c4ed12e9c8739e332bdcd9
         }
 
-        // if (!isValidData(address)) {
-        //     return res.status(400).send({ status: false, message: "Address is required." });
-        // }
-        
+        // Validation Ends...
+
         let createData = await userModel.create(requestBody);
         res.status(201).send({ status: true, message: "User data created successfully", data: createData, });
     }
@@ -79,6 +85,7 @@ const createUser = async function (req, res) {
     }
 };
 
+//========================================= < LOGIN USER > ============================================
 
 const loginUser = async function (req, res) {
     try {
@@ -93,8 +100,16 @@ const loginUser = async function (req, res) {
             return res.status(400).send({ status: false, message: "Email is required." });
         }
 
+        if (!isValidEmail.test(email)) {
+            return res.status(400).send({ status: false, message: "Please enter valid a email " });
+        }
+
         if (!isValidData(password)) {
             return res.status(400).send({ status: false, message: "Password is required." });
+        }
+
+        if (!(password.length >= 8 && password.length <= 15)) {
+            return res.status(400).send({ status: false, msg: "Password Should be minimum 8 characters and maximum 15 characters", });
         }
 
         const matchUser = await userModel.findOne({ email, password });
@@ -107,7 +122,11 @@ const loginUser = async function (req, res) {
                 userId: matchUser._id.toString(),
                 Project: "Book Management",
                 batch: "Uranium",
+<<<<<<< HEAD
                 iat: new Date().getTime()/ 1000 
+=======
+                iat: new Date().getTime() / 1000 //(iat)Issued At- the time at which the JWT was issued.              
+>>>>>>> abf7d95ca261511eb2c4ed12e9c8739e332bdcd9
             },
             "Project-03_group-28",
             {
