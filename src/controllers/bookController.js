@@ -67,8 +67,8 @@ const createBook = async function (req, res) {
             return res.status(400).send({ status: false, message: "Subcategory is Required" });
         }
 
-        if (!Array.isArray(subcategory)) {
-            if (subcategory.length == 0) {
+        if (Array.isArray(subcategory)) {
+            if (Array.isArray(subcategory.trim().split(',').map(tag => tag.trim()))) {
                 return res.status(400).send({ status: false, message: "Subcategory Must be in Array" });
             }
         }
@@ -123,6 +123,8 @@ const getBooksById = async function (req, res) {
 
         let findBookId = await bookModel.findById({ _id: bookId }).select({ ISBN: 0 })
 
+
+
         if (findBookId.length == 0)
             return res.status(404).send({ status: false, msg: "No Book Data Found" })
 
@@ -162,7 +164,7 @@ const updateBooks = async function (req, res) {
             return res.status(400).send({ status: false, message: "Please enter the valid book Id" })
         }
 
-        let findBookId = await bookModel.findById({ bookId, isDeleted: false })
+        let findBookId = await bookModel.findById({ _id: bookId, isDeleted: false })
         if (findBookId.length == 0)
             return res.status(404).send({ status: false, msg: "No Book Data Found" })
 

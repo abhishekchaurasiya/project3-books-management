@@ -20,5 +20,7 @@ let isValidReleasedAt = /((\d{4}[\/-])(\d{2}[\/-])(\d{2}))/;
 
 let isValidObjectId = /^[0-9a-fA-F]{24}$/;
 
+// /^([a-zA-Z0-9_=]+)\.([a-zA-Z0-9_=]+)\.([a-zA-Z0-9_\-\+\/=]*)/
+
 
 module.exports = { isValidData, isValidRequestBody, isValidEmail, isValidPhone, isValidISBN, isValidReleasedAt,isValidObjectId, isValidName }

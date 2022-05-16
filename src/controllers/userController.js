@@ -63,7 +63,7 @@ const createUser = async function (req, res) {
             return res.status(400).send({ status: false, msg: "Password Should be minimum 8 characters and maximum 15 characters", });
         }
 
-        if (typeof address !== "object") {
+        if (typeof address != "object") {
             return res.status(400).send({ status: false, message: "Address must be in Object" });
         }
 
@@ -108,12 +108,10 @@ const loginUser = async function (req, res) {
                 Project: "Book Management",
                 batch: "Uranium",
                 iat: new Date().getTime()/ 1000 
-                //give you time in miliseconds. But time in jwt token exp is in seconds, therefore we have to divide result by 1000.
-                //(iat)Issued At- the time at which the JWT was issued.
             },
             "Project-03_group-28",
             {
-                expiresIn: "1200sec",
+                expiresIn: "12000sec",
             });
 
         res.setHeader("x-user-key", token)

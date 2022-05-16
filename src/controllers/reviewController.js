@@ -7,34 +7,40 @@ const { isValidRequestBody, isValidData, isValidObjectId } = require("../utils/v
 const bookReview = async function (req, res) {
     try {
 
-        const bookId = req.params.bookId
+        const bookIds = req.params.bookId
         const requestBody = req.body;
 
         if (!isValidRequestBody(requestBody)) {
             return res.status(400).send({ status: false, message: "No data provided" });
         }
 
-        if (!isValidObjectId.test(bookId)) {
+        if (!isValidObjectId.test(bookIds)) {
             return res.status(400).send({ status: false, message: "Please enter the valid book Id" })
         }
 
-        let findBookId = await bookModel.findById({ _id: bookId })
+        let findBookId = await bookModel.findById({ _id: bookIds })
         if (!findBookId) {
             return res.status(404).send({ status: false, message: "No book found with this id" })
         }
 
-        let is_Deleted = bookId.isDeleted;
+        let is_Deleted = bookIds.isDeleted;
         if (is_Deleted == true) {
             return res.status(404).send({ status: false, message: "Book is already deleted" })
         }
 
-        let { rating, reviewedBy } = requestBody
+        let { bookId, rating, reviewedBy } = requestBody
 
-        requestBody.bookId = bookId
+        requestBody.bookId = bookIds
 
         if (!isValidData(reviewedBy)) {
             requestBody.reviewedBy = "Guest"
         }
+
+        if (!isValidObjectId.test(bookId)) {
+            return res.status(400).send({ status: false, message: "Please enter the valid book Id" })
+        }
+
+
 
         if (!isValidData(rating)) {
             return res.status(400).send({ status: false, msg: "Please provied  the rating  " })
