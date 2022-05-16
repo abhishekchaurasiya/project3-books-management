@@ -64,15 +64,9 @@ const createUser = async function (req, res) {
         if (!(password.length >= 8 && password.length <= 15)) {
             return res.status(400).send({ status: false, msg: "Password Should be minimum 8 characters and maximum 15 characters", });
         }
-<<<<<<< HEAD
-
-        if (typeof address != "object") {
-            return res.status(400).send({ status: false, message: "Address must be in Object" });
-=======
          
         if (typeof address !== "object"){
          return res.status(400).send({ status: false, message: "Address must be in Object" });
->>>>>>> abf7d95ca261511eb2c4ed12e9c8739e332bdcd9
         }
 
         // Validation Ends...
@@ -122,11 +116,7 @@ const loginUser = async function (req, res) {
                 userId: matchUser._id.toString(),
                 Project: "Book Management",
                 batch: "Uranium",
-<<<<<<< HEAD
-                iat: new Date().getTime()/ 1000 
-=======
                 iat: new Date().getTime() / 1000 //(iat)Issued At- the time at which the JWT was issued.              
->>>>>>> abf7d95ca261511eb2c4ed12e9c8739e332bdcd9
             },
             "Project-03_group-28",
             {

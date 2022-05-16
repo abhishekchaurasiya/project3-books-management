@@ -3,6 +3,7 @@ const bookModel = require("../models/bookModels");
 
 const { isValidRequestBody, isValidData, isValidObjectId } = require("../utils/validator");
 
+// Here Start Bookreview
 const bookReview = async function (req, res) {
     try {
 
@@ -42,6 +43,7 @@ const bookReview = async function (req, res) {
         if (!isValidData(rating)) {
             return res.status(400).send({ status: false, msg: "Please provied  the rating  " })
         }
+
         if (!(rating >= 1 && rating <= 5)) {
             return res.status(400).send({ status: false, msg: "Rating Should be minimum 1 and maximum 5" });
         }
@@ -60,7 +62,10 @@ const bookReview = async function (req, res) {
     catch (error) {
         res.status(500).send({ status: false, message: error.message });
     }
-}
+};
+// Here Ends Bookreview
+
+
 
 // Here start Update 
 
@@ -122,8 +127,10 @@ const reviewUpdate = async function (req, res) {
         res.status(500).send({ status: false, message: error.message });
     }
 }
+// Here Ends Update 
 
 
+// Here Starts Review delete 
 const reviewDelete = async function (req, res) {
     try {
         let { bookId, reviewId } = req.params;
@@ -162,6 +169,7 @@ const reviewDelete = async function (req, res) {
         res.status(500).send({ status: false, message: error.message });
     }
 }
+// Here Ends Review delete 
 
 
 module.exports = { bookReview, reviewUpdate, reviewDelete }
