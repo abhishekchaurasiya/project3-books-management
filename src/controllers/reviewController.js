@@ -23,7 +23,7 @@ const bookReview = async function (req, res) {
             return res.status(404).send({ status: false, message: "No book found with this id" })
         }
 
-        let is_Deleted = bookIds.isDeleted;
+        let is_Deleted = findBookId.isDeleted;
         if (is_Deleted == true) {
             return res.status(404).send({ status: false, message: "Book is already deleted" })
         }
